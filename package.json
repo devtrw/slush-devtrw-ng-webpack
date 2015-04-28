@@ -1,0 +1,32 @@
+{
+  "name": "slush-devtrw-ng-webpack",
+  "version": "1.0.0",
+  "description": "Slush generator for generating components of angular apps built using webpack",
+  "main": "slushfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:devtrw/slush-devtrw-ng-webpack.git"
+  },
+  "keywords": [
+    "slushgenerator"
+  ],
+  "author": "Steven Nance <steven@devtrw.com> (http://devtrw.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devtrw/slush-devtrw-ng-webpack/issues"
+  },
+  "homepage": "https://github.com/devtrw/slush-devtrw-ng-webpack",
+  "dependencies": {
+    "gulp": "^3.8.11",
+    "gulp-conflict": "^0.4.0",
+    "gulp-ejs": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "inquirer": "^0.8.2",
+    "lodash": "^3.7.0",
+    "prettyjson": "^1.1.0",
+    "slush": "^1.1.1"
+  }
+}

@@ -1,0 +1,31 @@
+<% npmModules.forEach(function (npmModule) { -%>
+import '<%= npmModule.packageName %>';
+<% }); -%>
+
+<% appModules.forEach(function (appModule) { -%>
+import <%= appModule.importName %> from '<%= appModule.from %>';
+<% }); -%>
+
+import <%= stateConfigFn %> from './<%= baseState %>-config';
+import <%= stateCtrlFn %>   from './<%= baseState %>-ctrl';
+
+const ngModule = angular.module('<%= moduleName %>', [
+<% if (npmModules.length) { -%>
+  // npm modules
+<% } -%>
+<% npmModules.forEach(function (npmModule) { -%>
+  '<%= npmModule.moduleName %>',
+<% }); -%>
+<% if (appModules.length) { -%>
+  // app modules
+<% } -%>
+<% for (var i = 0; i < appModules.length; i += 1) { -%>
+  <%= appModules[i].importName %>.name<%= i !== appModules.length -1 ? ',' : '' %>
+<% } -%>
+]);
+
+ngModule
+  .config(<%= stateConfigFn %>)
+  .controller('<%= stateCtrlFn %>', <%= stateCtrlFn %>);
+
+export default ngModule;

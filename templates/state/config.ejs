@@ -1,0 +1,13 @@
+import template from './<%= baseState %>.html';
+
+/*@ngInject*/
+function <%= stateConfigFn %>($stateProvider) {
+
+  $stateProvider.state('<%= state %>', {
+    url:        '/<%= baseState %>',
+    template:   template,
+    controller: '<%= stateCtrlFn %> as ctrl'
+  });
+}
+
+export default <%= stateConfigFn %>;
