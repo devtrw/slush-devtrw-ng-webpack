@@ -2,6 +2,8 @@
 import '<%= npmModule.packageName %>';
 <% }); -%>
 
+import angular from 'angular';
+
 <% appModules.forEach(function (appModule) { -%>
 import <%= appModule.importName %> from '<%= appModule.from %>';
 <% }); -%>

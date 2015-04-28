@@ -56,7 +56,6 @@ function processStateAnswers(answers) {
 
     module.importName = moduleParts.shift()  + moduleParts.map(hyphenToSnakeCase).join('');
 
-    console.log('p:' + parentModule + ' === m:' + answers.moduleName);
     if (parentModule === answers.moduleName) {
       module.from = './' + moduleParts[moduleParts.length - 1];
     } else {
@@ -90,6 +89,7 @@ function promptAddAppModule(answers, cb) {
     {type: 'confirm', name: 'yes', message: 'add app module?'}
   ], function (addModuleAnswer) {
     if (!addModuleAnswer.yes) {
+      answers.appModules.sort();
       promptConfirmAnswers(answers, cb);
     } else {
       inquirer.prompt([
@@ -122,6 +122,7 @@ function promptAddNpmModule(answers, cb) {
     {type: 'confirm', name: 'yes', message: 'add npm module?'}
   ], function (addModuleAnswer) {
     if (!addModuleAnswer.yes) {
+      answers.npmModules.sort();
       promptAddAppModule(answers, cb);
     } else {
       inquirer.prompt([
