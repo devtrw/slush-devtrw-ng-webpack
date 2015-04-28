@@ -89,7 +89,7 @@ function promptAddAppModule(answers, cb) {
     {type: 'confirm', name: 'yes', message: 'add app module?'}
   ], function (addModuleAnswer) {
     if (!addModuleAnswer.yes) {
-      answers.appModules.sort();
+      answers.appModules = _.sortBy(answers.appModules, 'name');
       promptConfirmAnswers(answers, cb);
     } else {
       inquirer.prompt([
@@ -122,7 +122,7 @@ function promptAddNpmModule(answers, cb) {
     {type: 'confirm', name: 'yes', message: 'add npm module?'}
   ], function (addModuleAnswer) {
     if (!addModuleAnswer.yes) {
-      answers.npmModules.sort();
+      answers.npmModules = _.sortBy(answers.npmModules, 'moduleName');
       promptAddAppModule(answers, cb);
     } else {
       inquirer.prompt([
