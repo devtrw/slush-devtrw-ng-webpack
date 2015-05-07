@@ -18,6 +18,12 @@ function processStateAnswers(answers) {
     return string.split('-').map(ucFirst).join('')
   }
 
+  function hyphenToCamelCase(string) {
+    var parts = string.split('-');
+
+    return parts.shift() + parts.map(ucFirst).join('');
+  }
+
   function createConfigFnName(app, state) {
     return [
       app,
@@ -40,13 +46,34 @@ function processStateAnswers(answers) {
     return ['src', 'states'].concat(answers.state.split('.')).join('/');
   }
 
+  function createPageTitle(baseState) {
+    return baseState
+      .split('-')
+      .map(function (state) { return state.charAt(0).toUpperCase() + state.slice(1); })
+      .join(' ');
+  }
+
+  function createTranslationsPath(moduleName) {
+    return moduleName
+      .split('.')
+      .reduce(function (path, modulePart) {
+        path[0] = path[0] + '{' + hyphenToCamelCase(modulePart) + ': ';
+        path[1] = path[1] + '}';
+
+        return path;
+      }, ['', '']);
+  }
+
   _.extend(answers, {
-    baseState:     answers.state.split('.').pop(),
-    moduleName:    [answers.app, 'states', answers.state].join('.'),
-    outputDir:     createOutputDir(answers),
-    stateConfigFn: createConfigFnName(answers.app, answers.state),
-    stateCtrlFn:   createCtrlFnName(answers.app, answers.state)
+    baseState:        answers.state.split('.').pop(),
+    moduleName:       [answers.app, 'states', answers.state].join('.'),
+    outputDir:        createOutputDir(answers),
+    stateConfigFn:    createConfigFnName(answers.app, answers.state),
+    stateCtrlFn:      createCtrlFnName(answers.app, answers.state)
   });
+
+  answers.pageTitle =  createPageTitle(answers.baseState);
+  answers.translationsPath = createTranslationsPath(answers.moduleName);
 
   answers.appModules.map(function (module) {
     var moduleParts = module.name.split('.');
@@ -54,7 +81,7 @@ function processStateAnswers(answers) {
     var stateModuleDepth = answers.state.split('.').length + 1;
     var relativeSrcDir = new Array(stateModuleDepth + 1).join('../').slice(0, -1);
 
-    module.importName = moduleParts.shift()  + moduleParts.map(hyphenToSnakeCase).join('');
+    module.importName = moduleParts.shift() + moduleParts.map(hyphenToSnakeCase).join('');
 
     if (parentModule === answers.moduleName) {
       module.from = './' + moduleParts[moduleParts.length - 1];
@@ -94,9 +121,9 @@ function promptAddAppModule(answers, cb) {
     } else {
       inquirer.prompt([
         {
-          type:     'input',
-          name:     'name',
-          message:  'The name of the angular module to include'
+          type:    'input',
+          name:    'name',
+          message: 'The name of the angular module to include'
         }
       ], function (module) {
         if (module.name.length) {
@@ -114,6 +141,10 @@ function promptAddNpmModule(answers, cb) {
       {
         packageName: 'angular-ui-router',
         moduleName:  'ui.router'
+      },
+      {
+        packageName: 'angular-translate',
+        moduleName:  'pascalprecht.translate'
       }
     ];
   }
@@ -127,14 +158,14 @@ function promptAddNpmModule(answers, cb) {
     } else {
       inquirer.prompt([
         {
-          type:     'input',
-          name:     'packageName',
-          message:  'Name of npm package name'
+          type:    'input',
+          name:    'packageName',
+          message: 'Name of npm package name'
         },
         {
-          type:     'input',
-          name:     'moduleName',
-          message:  'The name of the angular module the package provides'
+          type:    'input',
+          name:    'moduleName',
+          message: 'The name of the angular module the package provides'
         }
       ], function (npmModule) {
         if (npmModule.packageName && npmModule.moduleName) {
@@ -200,6 +231,14 @@ function buildTemplate(answers) {
     .pipe(gulp.dest('./' + answers.outputDir));
 }
 
+function buildTranslations(answers) {
+  return gulp.src(__dirname + '/templates/state/translations.ejs')
+    .pipe(gEjs(answers))
+    .pipe(gRename(answers.baseState + '-translations.js'))
+    .pipe(gConflict('./' + answers.outputDir))
+    .pipe(gulp.dest('./' + answers.outputDir));
+}
+
 gulp.task('state', function (done) {
   promptStateOptions(function (answers) {
       if (!answers.continue) {
@@ -210,6 +249,7 @@ gulp.task('state', function (done) {
         .on('end', function () { return buildConfig(answers); })
         .on('end', function () { return buildCtrl(answers); })
         .on('end', function () { return buildTemplate(answers); })
+        .on('end', function () { return buildTranslations(answers); })
         .on('end', function () { done(); })
         .resume();
     }

@@ -1,7 +1,13 @@
-import template from './<%= baseState %>.html';
+import template     from './<%= baseState %>.html';
+import translations from './<%= baseState %>-translations' %>;
 
 /*@ngInject*/
-function <%= stateConfigFn %>($stateProvider) {
+function <%= stateConfigFn %>($stateProvider, $translateProvider) {
+
+  $translateProvider.translations(
+    'en',
+    <%= translationsPath[0] %> translations <%= translationsPath[1] %>
+  );
 
   $stateProvider.state('<%= state %>', {
     url:        '/<%= baseState %>',

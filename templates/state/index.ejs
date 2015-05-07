@@ -15,9 +15,9 @@ const ngModule = angular.module('<%= moduleName %>', [
 <% if (npmModules.length) { -%>
   // npm modules
 <% } -%>
-<% npmModules.forEach(function (npmModule) { -%>
-  '<%= npmModule.moduleName %>',
-<% }); -%>
+<% for (var i = 0; i < npmModules.length; i += 1) { -%>
+  '<%= npmModules[i].moduleName %>'<%= i !== npmModules.length -1 || appModules.length ? ',' : '' %>
+<% }; -%>
 <% if (appModules.length) { -%>
   // app modules
 <% } -%>
