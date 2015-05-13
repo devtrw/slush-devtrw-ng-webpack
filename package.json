@@ -1,6 +1,6 @@
 {
   "name": "slush-devtrw-ng-webpack",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Slush generator for generating components of angular apps built using webpack",
   "main": "slushfile.js",
   "scripts": {
