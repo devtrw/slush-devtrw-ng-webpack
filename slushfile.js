@@ -65,14 +65,14 @@ function processStateAnswers(answers) {
   }
 
   _.extend(answers, {
-    baseState:        answers.state.split('.').pop(),
-    moduleName:       [answers.app, 'states', answers.state].join('.'),
-    outputDir:        createOutputDir(answers),
-    stateConfigFn:    createConfigFnName(answers.app, answers.state),
-    stateCtrlFn:      createCtrlFnName(answers.app, answers.state)
+    baseState:     answers.state.split('.').pop(),
+    moduleName:    [answers.app, 'states', answers.state].join('.'),
+    outputDir:     createOutputDir(answers),
+    stateConfigFn: createConfigFnName(answers.app, answers.state),
+    stateCtrlFn:   createCtrlFnName(answers.app, answers.state)
   });
 
-  answers.pageTitle =  createPageTitle(answers.baseState);
+  answers.pageTitle = createPageTitle(answers.baseState);
   answers.translationsPath = createTranslationsPath(answers.moduleName);
 
   answers.appModules.map(function (module) {
@@ -138,6 +138,10 @@ function promptAddAppModule(answers, cb) {
 function promptAddNpmModule(answers, cb) {
   if (!answers.npmModules) {
     answers.npmModules = [
+      {
+        packageName: 'angular-devtrw-translate',
+        moduleName:  'dtrw.translate'
+      },
       {
         packageName: 'angular-ui-router',
         moduleName:  'ui.router'
