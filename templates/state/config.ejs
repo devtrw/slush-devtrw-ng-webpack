@@ -1,7 +1,6 @@
 import template     from './<%= baseState %>.html';
 import translations from './<%= baseState %>-translations' %>;
 
-/*@ngInject*/
 function <%= stateConfigFn %>($stateProvider, $translateProvider) {
 
   $translateProvider.translations(
@@ -16,4 +15,4 @@ function <%= stateConfigFn %>($stateProvider, $translateProvider) {
   });
 }
 
-export default <%= stateConfigFn %>;
+export default /*@ngInject*/ <%= stateConfigFn %>;

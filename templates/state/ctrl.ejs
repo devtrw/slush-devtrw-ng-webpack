@@ -1,6 +1,5 @@
 import _ from 'lodash';
 
-/*@ngInject*/
 function <%= stateCtrlFn %>() {
   let ctrl = this;
 
@@ -8,4 +7,4 @@ function <%= stateCtrlFn %>() {
   });
 }
 
-export default <%= stateCtrlFn %>;
+export default /*@ngInject*/ <%= stateCtrlFn %>;
